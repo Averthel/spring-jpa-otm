@@ -18,8 +18,8 @@ public class Client implements Serializable{
     @Column(name="lastname", nullable = false)
     private String lastName;
     @Column(nullable = false)
-    private String adress;
-    @OneToMany(mappedBy = "client")
+    private String address;
+    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
     private List<Order> orders;
 
     Client(){}
@@ -27,7 +27,7 @@ public class Client implements Serializable{
     public Client(String firstname, String lastname, String adress) {
         this.firstName = firstname;
         this.lastName = lastname;
-        this.adress = adress;
+        this.address = adress;
     }
 
 
@@ -56,11 +56,11 @@ public class Client implements Serializable{
     }
 
     public String getAdress() {
-        return adress;
+        return address;
     }
 
     public void setAdress(String adress) {
-        this.adress = adress;
+        this.address = adress;
     }
 
     public List<Order> getOrders() {
@@ -73,14 +73,11 @@ public class Client implements Serializable{
 
     @Override
     public String toString() {
-        return "Client{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", adress='" + adress + '\'' +
-                ", orders=" + orders +
-                '}';
+        return "Client [id=" + id + ", firstName=" + firstName
+                + ", lastName=" + lastName + ", address=" + address + orders.size()
+                + ",\n orders=" + orders + "]";
     }
+
 
     @Override
     public boolean equals(Object o) {
@@ -94,7 +91,7 @@ public class Client implements Serializable{
             return false;
         if (getLastName() != null ? !getLastName().equals(client.getLastName()) : client.getLastName() != null)
             return false;
-        if (getAdress() != null ? !getAdress().equals(client.getAdress()) : client.getAdress() != null) return false;
+        if (address != null ? !address.equals(client.address) : client.address != null) return false;
         return getOrders() != null ? getOrders().equals(client.getOrders()) : client.getOrders() == null;
     }
 
@@ -103,7 +100,7 @@ public class Client implements Serializable{
         int result = (int) (getId() ^ (getId() >>> 32));
         result = 31 * result + (getFirstName() != null ? getFirstName().hashCode() : 0);
         result = 31 * result + (getLastName() != null ? getLastName().hashCode() : 0);
-        result = 31 * result + (getAdress() != null ? getAdress().hashCode() : 0);
+        result = 31 * result + (address != null ? address.hashCode() : 0);
         result = 31 * result + (getOrders() != null ? getOrders().hashCode() : 0);
         return result;
     }

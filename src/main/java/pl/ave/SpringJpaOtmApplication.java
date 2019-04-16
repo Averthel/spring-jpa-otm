@@ -19,7 +19,7 @@ public class SpringJpaOtmApplication {
         Client client = new Client("Majkowy", "Majk", "Wczasowa, Warszawa");
         ClientDao clientDao = ctx.getBean(ClientDao.class);
         clientDao.save(client);
-        System.out.println(client);
+
 
 
         Order order = new Order("Frytki z keczupem, dostawa do domu");
@@ -34,6 +34,9 @@ public class SpringJpaOtmApplication {
         productDao.save(product2);
 
         orderDao.addProductsToOrder(order.getId(), product, product2);
+
+        Client getClient = clientDao.get(client.getId());
+        System.out.println("\n"+getClient);
 
         ctx.close();
     }

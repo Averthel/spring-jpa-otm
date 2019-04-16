@@ -1,30 +1,35 @@
 package pl.ave.model;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name ="client_order")
+@Table(name = "client_order")
 public class Order {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @Column(name="id_order")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_order")
     private Long id;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SELECT)
     @JoinTable(name = "order_products",
-            joinColumns = {@JoinColumn(name="order_id", referencedColumnName="id_order")},
-            inverseJoinColumns = {@JoinColumn(name="product_id", referencedColumnName="id_product")}
+            joinColumns = {@JoinColumn(name = "order_id", referencedColumnName = "id_order")},
+            inverseJoinColumns = {@JoinColumn(name = "product_id", referencedColumnName = "id_product")}
     )
     private List<Product> products;
-    @Column(name="details", length = 512)
+    @Column(name = "details", length = 512)
     private String orderDetails;
     @ManyToOne
-    @JoinColumn(name="client_id")
+    @JoinColumn(name = "client_id")
     private Client client;
 
-    Order(){}
+    Order() {
+    }
 
     public Order(String orderDetails) {
         this.orderDetails = orderDetails;
@@ -65,7 +70,8 @@ public class Order {
     public String toString() {
         return "Order [id=" + id + ", product=" + products
                 + ", orderDetails=" + orderDetails + ", "
-                + client.getFirstName() + " " + client.getLastName() + "]";
+                + client.getFirstName() + " " + client.getLastName() + products.size()
+                + ",\n products=" + products + "]";
     }
 
     @Override
