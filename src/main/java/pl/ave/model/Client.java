@@ -2,6 +2,7 @@ package pl.ave.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,8 +20,13 @@ public class Client implements Serializable{
     private String lastName;
     @Column(nullable = false)
     private String address;
-    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
-    private List<Order> orders;
+    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    private List<Order> orders = new ArrayList<>();
+
+    public void addOrder(Order order){
+        order.setClient(this);
+        getOrders().add(order);
+    }
 
     Client(){}
 

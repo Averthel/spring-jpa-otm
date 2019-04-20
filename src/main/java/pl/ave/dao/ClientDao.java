@@ -9,4 +9,9 @@ import javax.transaction.Transactional;
 @Transactional
 public class ClientDao extends GenericDao<Client, Long> {
 
+    public void removeAllOrders(Client client){
+        Client managedClient = get(client.getId());
+        managedClient.getOrders().clear();
+    }
+
 }
